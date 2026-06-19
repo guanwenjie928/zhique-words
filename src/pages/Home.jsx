@@ -19,36 +19,38 @@ export default function Home() {
   return (
     <div className="space-y-8">
       {/* Hero 区 */}
-      <div className="pt-4 md:pt-8">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-2xl">🐦</span>
-          <span className="text-xs font-mono uppercase tracking-widest text-[var(--ks-kinpaku)]">
-            ZHIQUE WORDS
+      <div className="pt-6 md:pt-10 animate-fade-in">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-2xl animate-float">🐦</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--gold)]">
+            Zhique Words
           </span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-display font-light text-[var(--ks-champagne)] leading-tight">
-          增加你的英语词汇量
+        <h1 className="text-3xl md:text-5xl font-display font-light text-[var(--text-bright)] leading-tight">
+          增加你的<br/>
+          <span className="text-gradient-gold font-medium">英语词汇量</span>
         </h1>
-        <p className="mt-2 text-[var(--ks-text-muted)] text-sm md:text-base max-w-md">
-          随机挖空 · 补全单词 · 错词复习 · 循序渐进
+        <p className="mt-3 text-[var(--text-muted)] text-sm md:text-base max-w-md">
+          随机挖空 · 补全单词 · 发音朗读 · 错词复习 · 循序渐进
         </p>
       </div>
 
       {/* 今日概览 */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <StatBox label="今日练习" value={todayStats.practiced} unit="词" color="gold" />
-        <StatBox label="今日正确率" value={todayAccuracy} unit="%" color="patina" />
-        <StatBox label="连续打卡" value={stats.streak} unit="天" color="gold" />
-        <StatBox label="待复习错词" value={totalWrong} unit="词" color={totalWrong > 0 ? 'vermilion' : 'patina'} />
+        <StatBox label="今日练习" value={todayStats.practiced} unit="词" color="gold" delay="stagger-1" />
+        <StatBox label="今日正确率" value={todayAccuracy} unit="%" color="patina" delay="stagger-2" />
+        <StatBox label="连续打卡" value={stats.streak} unit="天" color="gold" delay="stagger-3" />
+        <StatBox label="待复习错词" value={totalWrong} unit="词" color={totalWrong > 0 ? 'vermilion' : 'patina'} delay="stagger-4" />
       </div>
 
       {/* 快捷入口 */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <QuickLink
           to="/practice"
           title="开始练习"
           desc="随机挖空补全"
           icon="✍️"
+          delay="stagger-1"
         />
         <QuickLink
           to="/daily"
@@ -56,30 +58,33 @@ export default function Home() {
           desc={dailyDone ? '继续今日学习' : '今日尚未开始'}
           icon="📅"
           highlight={!dailyDone}
+          delay="stagger-2"
         />
         <QuickLink
           to="/wrong-book"
           title="错词复习"
           desc={totalWrong > 0 ? `${totalWrong} 个待复习` : '暂无错词'}
           icon="🔁"
+          delay="stagger-3"
         />
       </div>
 
       {/* 词库选择 */}
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg text-[var(--ks-champagne)] font-medium">选择词库</h2>
-          <span className="text-xs font-mono uppercase tracking-wider text-[var(--ks-text-faint)]">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg text-[var(--text-bright)] font-medium">选择词库</h2>
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--text-faint)]">
             {WORDBANKS.length} 个等级
           </span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {WORDBANKS.map(wb => (
+          {WORDBANKS.map((wb, i) => (
             <LevelCard
               key={wb.id}
               wordbank={wb}
               progress={stats.levelProgress[wb.id]}
               wrongCount={wrongWords.filter(w => w.levelId === wb.id && !w.mastered).length}
+              index={i}
             />
           ))}
         </div>
@@ -88,38 +93,40 @@ export default function Home() {
   )
 }
 
-function StatBox({ label, value, unit, color }) {
+function StatBox({ label, value, unit, color, delay = '' }) {
   const colorMap = {
-    gold: 'var(--ks-kinpaku)',
-    patina: 'var(--ks-patina)',
-    vermilion: 'var(--ks-vermilion)',
+    gold: 'var(--gold)',
+    patina: 'var(--patina-bright)',
+    vermilion: 'var(--vermilion-bright)',
   }
   return (
-    <div className="p-4 rounded-lg border border-[var(--ks-rule)] bg-[var(--ks-raised)]">
-      <p className="text-xs font-mono uppercase tracking-wider text-[var(--ks-text-faint)] mb-1">{label}</p>
-      <p className="text-2xl font-medium" style={{ color: colorMap[color] }}>
-        {value}<span className="text-sm text-[var(--ks-text-muted)] ml-1">{unit}</span>
+    <div className={`p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-raised)] card-hover animate-fade-in ${delay}`}>
+      <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--text-faint)] mb-1.5">{label}</p>
+      <p className="text-2xl font-display font-medium" style={{ color: colorMap[color] }}>
+        {value}<span className="text-sm text-[var(--text-muted)] ml-1 font-body font-normal">{unit}</span>
       </p>
     </div>
   )
 }
 
-function QuickLink({ to, title, desc, icon, highlight }) {
+function QuickLink({ to, title, desc, icon, highlight, delay = '' }) {
   return (
     <Link
       to={to}
-      className={`flex items-center gap-3 p-4 rounded-lg border transition-all duration-300 ${
+      className={`flex items-center gap-4 p-5 rounded-xl border transition-all duration-300 animate-fade-in card-hover ${delay} ${
         highlight
-          ? 'border-[var(--ks-rule-strong)] bg-[var(--ks-kinpaku)]/5 hover:bg-[var(--ks-kinpaku)]/10'
-          : 'border-[var(--ks-rule)] bg-[var(--ks-raised)] hover:border-[var(--ks-rule-strong)]'
+          ? 'border-[var(--border-gold-strong)] bg-[var(--gold-glow)] hover:bg-[var(--gold-glow)] hover:shadow-[var(--shadow-gold)]'
+          : 'border-[var(--border)] bg-[var(--bg-raised)] hover:border-[var(--border-gold)]'
       }`}
     >
-      <span className="text-2xl">{icon}</span>
+      <span className="text-2xl transition-transform duration-300 hover:scale-110">{icon}</span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-[var(--ks-champagne)] truncate">{title}</p>
-        <p className="text-xs text-[var(--ks-text-faint)] truncate">{desc}</p>
+        <p className="text-sm font-semibold text-[var(--text-bright)] truncate">{title}</p>
+        <p className="text-xs text-[var(--text-faint)] truncate mt-0.5">{desc}</p>
       </div>
-      <span className="text-[var(--ks-text-faint)]">→</span>
+      <svg className="text-[var(--text-faint)] group-hover:text-[var(--gold)] transition-colors" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
     </Link>
   )
 }

@@ -4,13 +4,8 @@ import PronounceButton from './PronounceButton'
 
 /**
  * 单词练习卡片 — 支持拼写填空和字母填空两种模式
- *
- * @param {Object} wordData - { word, translations }
- * @param {'spelling'|'letter'} mode - 练习模式
- * @param {Function} onAnswer - (correct: boolean) => void
- * @param {boolean} autoSpeak - 是否自动发音
  */
-export default function WordCard({ wordData, mode, onAnswer, autoSpeak }) {
+export default function WordCard({ wordData, mode, onAnswer, onNext, autoSpeak }) {
   const [userInput, setUserInput] = useState('')
   const [letterInputs, setLetterInputs] = useState([])
   const [blankData, setBlankData] = useState(null)
@@ -38,8 +33,8 @@ export default function WordCard({ wordData, mode, onAnswer, autoSpeak }) {
       setLetterInputs([])
     }
 
-    // 自动聚焦
-    setTimeout(() => inputRef.current?.focus(), 100)
+    const timer = setTimeout(() => inputRef.current?.focus(), 150)
+    return () => clearTimeout(timer)
   }, [word, mode])
 
   // 提交答案
@@ -60,43 +55,43 @@ export default function WordCard({ wordData, mode, onAnswer, autoSpeak }) {
     onAnswer?.(correct)
   }
 
-  // 下一题
-  const handleNext = () => {
-    // 由父组件控制
-  }
-
-  // 回车提交
+  // 回车提交 / 下一题
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       if (!checked) {
         handleSubmit(e)
       } else {
-        handleNext()
+        onNext?.()
       }
     }
   }
 
   if (!word) return null
 
-  const cardBorder = status === 'correct'
-    ? 'border-[var(--ks-patina)]/50'
+  const cardStyle = status === 'correct'
+    ? { borderColor: 'rgba(93, 186, 176, 0.4)', boxShadow: 'var(--shadow-patina)' }
     : status === 'wrong'
-      ? 'border-[var(--ks-vermilion)]/50'
-      : 'border-[var(--ks-rule)]'
+      ? { borderColor: 'rgba(214, 90, 74, 0.4)', boxShadow: '0 4px 20px rgba(214, 90, 74, 0.1)' }
+      : { borderColor: 'var(--border)' }
 
   return (
-    <div className={`p-6 md:p-8 rounded-lg border ${cardBorder} bg-[var(--ks-raised)] transition-all duration-300`}>
+    <div
+      className={`p-6 md:p-10 rounded-2xl bg-[var(--bg-raised)] border transition-all duration-500 ${status === 'wrong' ? 'animate-wrong-shake' : ''}`}
+      style={cardStyle}
+    >
       {/* 释义区 */}
-      <div className="mb-6 text-center">
-        <p className="text-xs font-mono uppercase tracking-widest text-[var(--ks-text-faint)] mb-2">释义</p>
-        <p className="text-lg md:text-xl text-[var(--ks-champagne)] leading-relaxed">
+      <div className="mb-8 text-center">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-faint)] mb-3">
+          释义 · MEANING
+        </p>
+        <p className="text-lg md:text-xl text-[var(--text-bright)] leading-relaxed font-display">
           {translationText}
         </p>
       </div>
 
       {/* 分隔线 */}
-      <div className="h-px bg-[var(--ks-rule)] mb-6" />
+      <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-hover)] to-transparent mb-8" />
 
       {/* 填空区 */}
       {mode === 'spelling' ? (
@@ -122,9 +117,11 @@ export default function WordCard({ wordData, mode, onAnswer, autoSpeak }) {
 
       {/* 答案揭示 + 发音 */}
       {checked && (
-        <div className="mt-6 flex items-center justify-center gap-4 animate-fade-in">
+        <div className="mt-8 flex items-center justify-center gap-4 animate-scale-in">
           <div className="text-center">
-            <p className={`text-2xl md:text-3xl font-medium ${status === 'correct' ? 'text-[var(--ks-patina)]' : 'text-[var(--ks-kinpaku)]'}`}>
+            <p className={`text-2xl md:text-4xl font-display font-medium ${
+              status === 'correct' ? 'text-[var(--patina-bright)]' : 'text-[var(--gold)]'
+            }`}>
               {word}
             </p>
           </div>
@@ -133,18 +130,18 @@ export default function WordCard({ wordData, mode, onAnswer, autoSpeak }) {
       )}
 
       {/* 操作按钮 */}
-      <div className="mt-6 flex justify-center gap-3">
+      <div className="mt-8 flex justify-center gap-3">
         {!checked ? (
           <button
             onClick={handleSubmit}
-            className="px-8 py-2.5 rounded border border-[var(--ks-rule-strong)] bg-[var(--ks-kinpaku)] text-[var(--ks-lacquer-deep)] font-medium hover:bg-[var(--ks-kinpaku-rich)] transition-colors"
+            className="px-10 py-3 rounded-xl bg-[var(--gold)] text-[var(--bg-base)] font-semibold text-sm tracking-wide hover:bg-[var(--gold-bright)] hover:shadow-[var(--shadow-gold)] active:scale-95 transition-all duration-300"
           >
             提交答案
           </button>
         ) : (
           <button
-            onClick={handleNext}
-            className="px-8 py-2.5 rounded border border-[var(--ks-rule-strong)] bg-[var(--ks-kinpaku)] text-[var(--ks-lacquer-deep)] font-medium hover:bg-[var(--ks-kinpaku-rich)] transition-colors"
+            onClick={() => onNext?.()}
+            className="px-10 py-3 rounded-xl bg-[var(--gold)] text-[var(--bg-base)] font-semibold text-sm tracking-wide hover:bg-[var(--gold-bright)] hover:shadow-[var(--shadow-gold)] active:scale-95 transition-all duration-300"
           >
             下一题 →
           </button>
@@ -153,8 +150,20 @@ export default function WordCard({ wordData, mode, onAnswer, autoSpeak }) {
 
       {/* 结果反馈 */}
       {checked && (
-        <div className={`mt-4 text-center text-sm font-mono uppercase tracking-wider animate-fade-in ${status === 'correct' ? 'text-[var(--ks-patina)]' : 'text-[var(--ks-vermilion)]'}`}>
-          {status === 'correct' ? '✓ 回答正确' : '✗ 回答错误，已加入错词本'}
+        <div className={`mt-5 text-center text-sm font-medium animate-fade-in ${
+          status === 'correct' ? 'text-[var(--patina-bright)]' : 'text-[var(--vermilion-bright)]'
+        }`}>
+          {status === 'correct' ? (
+            <span className="inline-flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              回答正确
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              回答错误，已加入错词本
+            </span>
+          )}
         </div>
       )}
     </div>
@@ -165,7 +174,9 @@ export default function WordCard({ wordData, mode, onAnswer, autoSpeak }) {
 function SpellingMode({ userInput, setUserInput, checked, status, word, inputRef, onKeyDown }) {
   return (
     <div className="text-center">
-      <p className="text-xs font-mono uppercase tracking-widest text-[var(--ks-text-faint)] mb-3">拼写单词</p>
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-faint)] mb-4">
+        拼写单词 · SPELL THE WORD
+      </p>
       <input
         ref={inputRef}
         type="text"
@@ -174,11 +185,11 @@ function SpellingMode({ userInput, setUserInput, checked, status, word, inputRef
         onKeyDown={onKeyDown}
         disabled={checked}
         placeholder="输入完整的英文单词…"
-        className={`max-w-xs mx-auto text-center text-xl tracking-wider ${
+        className={`max-w-sm mx-auto text-center text-xl tracking-[0.1em] font-mono ${
           checked
             ? status === 'correct'
-              ? 'border-[var(--ks-patina)] text-[var(--ks-patina)]'
-              : 'border-[var(--ks-vermilion)] text-[var(--ks-vermilion)] animate-shake'
+              ? 'border-[var(--patina)] text-[var(--patina-bright)]'
+              : 'border-[var(--vermilion)] text-[var(--vermilion-bright)]'
             : ''
         }`}
         autoComplete="off"
@@ -186,8 +197,8 @@ function SpellingMode({ userInput, setUserInput, checked, status, word, inputRef
         spellCheck="false"
       />
       {checked && status === 'wrong' && (
-        <p className="mt-2 text-sm text-[var(--ks-text-muted)]">
-          正确答案: <span className="text-[var(--ks-kinpaku)] font-medium">{word}</span>
+        <p className="mt-3 text-sm text-[var(--text-muted)] animate-fade-in">
+          正确答案: <span className="text-[var(--gold)] font-medium font-mono">{word}</span>
         </p>
       )}
     </div>
@@ -200,10 +211,23 @@ function LetterMode({ blankData, letterInputs, setLetterInputs, checked, word, o
 
   const { display, blanks } = blankData
 
+  const handleSingleChange = (blankIdx, value) => {
+    const newInputs = [...letterInputs]
+    newInputs[blankIdx] = value
+    setLetterInputs(newInputs)
+    // 自动跳到下一个空
+    if (value && blankIdx < blanks.length - 1) {
+      const nextInput = document.getElementById(`blank-${blankIdx + 1}`)
+      nextInput?.focus()
+    }
+  }
+
   return (
     <div className="text-center">
-      <p className="text-xs font-mono uppercase tracking-widest text-[var(--ks-text-faint)] mb-3">补全缺失字母</p>
-      <div className="flex items-center justify-center gap-1 flex-wrap">
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-faint)] mb-4">
+        补全缺失字母 · FILL IN THE BLANKS
+      </p>
+      <div className="flex items-center justify-center gap-1.5 flex-wrap">
         {display.map((ch, i) => {
           const blankIdx = blanks.indexOf(i)
           if (ch === null) {
@@ -214,38 +238,34 @@ function LetterMode({ blankData, letterInputs, setLetterInputs, checked, word, o
             return (
               <input
                 key={i}
+                id={`blank-${blankIdx}`}
                 type="text"
                 maxLength={1}
                 value={value}
-                onChange={(e) => {
-                  const newInputs = [...letterInputs]
-                  newInputs[blankIdx] = e.target.value
-                  setLetterInputs(newInputs)
-                }}
+                onChange={(e) => handleSingleChange(blankIdx, e.target.value)}
                 onKeyDown={onKeyDown}
                 disabled={checked}
-                className={`w-9 h-12 md:w-10 md:h-12 text-center text-xl font-mono uppercase ${
+                className={`w-10 h-12 md:w-12 md:h-14 text-center text-xl font-mono uppercase rounded-lg transition-all duration-300 ${
                   isWrong
-                    ? 'border-[var(--ks-vermilion)] text-[var(--ks-vermilion)] bg-[var(--ks-vermilion)]/8'
+                    ? 'border-[var(--vermilion)] text-[var(--vermilion-bright)] bg-[var(--vermilion-glow)]'
                     : isRight
-                      ? 'border-[var(--ks-patina)] text-[var(--ks-patina)] bg-[var(--ks-patina)]/8'
-                      : 'border-[var(--ks-rule-strong)]'
+                      ? 'border-[var(--patina)] text-[var(--patina-bright)] bg-[var(--patina-glow)]'
+                      : 'border-[var(--border-gold-strong)] focus:border-[var(--gold)]'
                 }`}
-                style={{ borderRadius: 'var(--ks-radius)' }}
                 autoComplete="off"
               />
             )
           }
           return (
-            <span key={i} className="w-9 h-12 md:w-10 md:h-12 flex items-center justify-center text-xl font-mono text-[var(--ks-text-muted)]">
+            <span key={i} className="w-10 h-12 md:w-12 md:h-14 flex items-center justify-center text-xl font-mono text-[var(--text-muted)]">
               {ch}
             </span>
           )
         })}
       </div>
       {checked && (
-        <p className="mt-3 text-sm text-[var(--ks-text-muted)]">
-          完整单词: <span className="text-[var(--ks-kinpaku)] font-medium">{word}</span>
+        <p className="mt-4 text-sm text-[var(--text-muted)] animate-fade-in">
+          完整单词: <span className="text-[var(--gold)] font-medium font-mono">{word}</span>
         </p>
       )}
     </div>

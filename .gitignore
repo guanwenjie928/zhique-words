@@ -9,3 +9,7 @@ dist-ssr
 .vite
 .DS_Store
 *.sw?
+
+# Debug files
+debug-*.cjs
+debug-*.png

@@ -7,9 +7,8 @@ import { Link } from 'react-router-dom'
 
 export default function WrongBook() {
   const { wrongWords, removeWrongWord, markWordMastered, reviewWordSuccess, reviewWordFail } = useStorage()
-  const [filter, setFilter] = useState('all') // all | due | mastered
+  const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
-  const [selectedWord, setSelectedWord] = useState(null)
 
   const filteredWords = useMemo(() => {
     let result = wrongWords
@@ -35,40 +34,40 @@ export default function WrongBook() {
   return (
     <div className="space-y-6">
       {/* 标题 */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-fade-in">
         <div>
-          <h1 className="text-xl md:text-2xl text-[var(--ks-champagne)] font-medium">错词本</h1>
-          <p className="text-sm text-[var(--ks-text-faint)] mt-1">
-            基于艾宾浩斯遗忘曲线智能复习
+          <h1 className="text-xl md:text-2xl text-[var(--text-bright)] font-semibold">错词本</h1>
+          <p className="text-xs text-[var(--text-faint)] mt-0.5 font-mono uppercase tracking-wider">
+            Ebbinghaus Review System
           </p>
         </div>
         <Link
           to="/practice"
-          className="px-4 py-2 text-sm rounded border border-[var(--ks-rule-strong)] bg-[var(--ks-kinpaku)] text-[var(--ks-lacquer-deep)] font-medium hover:bg-[var(--ks-kinpaku-rich)] transition-colors"
+          className="px-5 py-2.5 text-sm rounded-xl bg-[var(--gold)] text-[var(--bg-base)] font-semibold hover:bg-[var(--gold-bright)] hover:shadow-[var(--shadow-gold)] active:scale-95 transition-all duration-300"
         >
           开始复习
         </Link>
       </div>
 
       {/* 统计 */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="p-3 rounded-lg border border-[var(--ks-rule)] bg-[var(--ks-raised)] text-center">
-          <p className="text-xs font-mono uppercase tracking-wider text-[var(--ks-text-faint)]">总错词</p>
-          <p className="text-xl font-medium text-[var(--ks-champagne)] mt-1">{wrongWords.length}</p>
+      <div className="grid grid-cols-3 gap-3 animate-fade-in stagger-1">
+        <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-raised)] text-center card-hover">
+          <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--text-faint)]">总错词</p>
+          <p className="text-2xl font-display font-medium text-[var(--text-bright)] mt-1">{wrongWords.length}</p>
         </div>
-        <div className="p-3 rounded-lg border border-[var(--ks-vermilion)]/30 bg-[var(--ks-vermilion)]/5 text-center">
-          <p className="text-xs font-mono uppercase tracking-wider text-[var(--ks-text-faint)]">待复习</p>
-          <p className="text-xl font-medium text-[var(--ks-vermilion)] mt-1">{dueCount}</p>
+        <div className="p-4 rounded-xl border border-[var(--vermilion)]/30 bg-[var(--vermilion-glow)] text-center card-hover">
+          <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--text-faint)]">待复习</p>
+          <p className="text-2xl font-display font-medium text-[var(--vermilion-bright)] mt-1">{dueCount}</p>
         </div>
-        <div className="p-3 rounded-lg border border-[var(--ks-patina)]/30 bg-[var(--ks-patina)]/5 text-center">
-          <p className="text-xs font-mono uppercase tracking-wider text-[var(--ks-text-faint)]">已掌握</p>
-          <p className="text-xl font-medium text-[var(--ks-patina)] mt-1">{masteredCount}</p>
+        <div className="p-4 rounded-xl border border-[var(--patina)]/30 bg-[var(--patina-glow)] text-center card-hover">
+          <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--text-faint)]">已掌握</p>
+          <p className="text-2xl font-display font-medium text-[var(--patina-bright)] mt-1">{masteredCount}</p>
         </div>
       </div>
 
       {/* 筛选 + 搜索 */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex rounded border border-[var(--ks-rule)] overflow-hidden">
+      <div className="flex items-center gap-3 flex-wrap animate-fade-in stagger-2">
+        <div className="flex rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--bg-raised)]">
           {[
             { key: 'all', label: '未掌握' },
             { key: 'due', label: `待复习 (${dueCount})` },
@@ -77,10 +76,10 @@ export default function WrongBook() {
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
-              className={`px-3 py-1.5 text-xs transition-colors ${
+              className={`px-3 py-2 text-xs font-medium transition-all duration-300 ${
                 filter === f.key
-                  ? 'bg-[var(--ks-kinpaku)] text-[var(--ks-lacquer-deep)]'
-                  : 'text-[var(--ks-text-muted)] hover:text-[var(--ks-text)]'
+                  ? 'bg-[var(--gold)] text-[var(--bg-base)]'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-bright)]'
               }`}
             >
               {f.label}
@@ -98,80 +97,76 @@ export default function WrongBook() {
 
       {/* 错词列表 */}
       {filteredWords.length === 0 ? (
-        <div className="p-12 text-center">
-          <p className="text-4xl mb-4">📭</p>
-          <p className="text-[var(--ks-text-muted)]">
-            {filter === 'mastered' ? '还没有已掌握的错词' : '暂无错词，继续练习吧！'}
+        <div className="p-12 md:p-16 text-center rounded-2xl border border-[var(--border)] bg-[var(--bg-raised)] animate-scale-in">
+          <p className="text-5xl mb-4 animate-float">📭</p>
+          <p className="text-[var(--text-muted)] font-medium">
+            {filter === 'mastered' ? '还没有已掌握的错词' : '暂无错词，继续练习吧'}
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
-          {filteredWords.map(w => {
+        <div className="space-y-2.5">
+          {filteredWords.map((w, i) => {
             const status = getReviewStatus(w)
             const progress = getEbbinghausProgress(w.reviewCount)
             const wb = getWordbank(w.levelId)
             return (
               <div
                 key={w.word}
-                className={`p-4 rounded-lg border bg-[var(--ks-raised)] transition-all ${
+                className={`p-4 rounded-xl border bg-[var(--bg-raised)] card-hover animate-fade-in ${
                   status.urgent && !w.mastered
-                    ? 'border-[var(--ks-vermilion)]/30'
-                    : 'border-[var(--ks-rule)]'
-                }`}
+                    ? 'border-[var(--vermilion)]/30'
+                    : 'border-[var(--border)]'
+                } ${i < 8 ? `stagger-${i + 1}` : ''}`}
               >
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   {/* 左侧：单词信息 */}
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-base font-medium text-[var(--ks-champagne)]">{w.word}</span>
-                        {wb && <span className="text-xs text-[var(--ks-text-faint)]">{wb.name}</span>}
+                        <span className="text-base font-semibold text-[var(--text-bright)]">{w.word}</span>
+                        {wb && <span className="text-[10px] font-mono text-[var(--text-faint)] uppercase tracking-wider">{wb.name}</span>}
                       </div>
-                      <p className="text-sm text-[var(--ks-text-muted)] truncate mt-0.5">{w.translation}</p>
+                      <p className="text-sm text-[var(--text-muted)] truncate mt-0.5">{w.translation}</p>
                     </div>
                     <PronounceButton word={w.word} size="sm" />
                   </div>
 
                   {/* 右侧：状态 + 操作 */}
                   <div className="flex items-center gap-2 flex-wrap">
-                    {/* 复习状态 */}
                     {!w.mastered && (
-                      <span className={`px-2 py-0.5 text-xs rounded-full border ${
+                      <span className={`px-2 py-0.5 text-[10px] font-medium rounded-full border ${
                         status.urgent
-                          ? 'border-[var(--ks-vermilion)]/40 text-[var(--ks-vermilion)]'
-                          : 'border-[var(--ks-rule)] text-[var(--ks-text-faint)]'
+                          ? 'border-[var(--vermilion)]/40 text-[var(--vermilion-bright)]'
+                          : 'border-[var(--border)] text-[var(--text-faint)]'
                       }`}>
                         {status.label}
                       </span>
                     )}
-                    {/* 错误次数 */}
-                    <span className="text-xs font-mono text-[var(--ks-text-faint)]">
+                    <span className="text-[10px] font-mono text-[var(--text-faint)]">
                       ×{w.wrongCount}
                     </span>
-                    {/* 艾宾浩斯进度 */}
                     {!w.mastered && (
-                      <span className="text-xs font-mono text-[var(--ks-text-faint)]">
+                      <span className="text-[10px] font-mono text-[var(--text-faint)]">
                         {progress.current}/{progress.total}
                       </span>
                     )}
                     {w.mastered && (
-                      <span className="px-2 py-0.5 text-xs rounded-full border border-[var(--ks-patina)]/40 text-[var(--ks-patina)]">
+                      <span className="px-2 py-0.5 text-[10px] font-medium rounded-full border border-[var(--patina)]/40 text-[var(--patina-bright)]">
                         ✓ 已掌握
                       </span>
                     )}
-                    {/* 操作按钮 */}
                     {!w.mastered && (
                       <>
                         <button
                           onClick={() => reviewWordSuccess(w.word)}
-                          className="px-2 py-1 text-xs rounded border border-[var(--ks-patina)]/40 text-[var(--ks-patina)] hover:bg-[var(--ks-patina)]/10 transition-colors"
+                          className="w-7 h-7 flex items-center justify-center text-xs rounded-lg border border-[var(--patina)]/40 text-[var(--patina-bright)] hover:bg-[var(--patina-glow)] active:scale-90 transition-all duration-200"
                           title="标记复习成功"
                         >
                           ✓
                         </button>
                         <button
                           onClick={() => reviewWordFail(w.word)}
-                          className="px-2 py-1 text-xs rounded border border-[var(--ks-vermilion)]/40 text-[var(--ks-vermilion)] hover:bg-[var(--ks-vermilion)]/10 transition-colors"
+                          className="w-7 h-7 flex items-center justify-center text-xs rounded-lg border border-[var(--vermilion)]/40 text-[var(--vermilion-bright)] hover:bg-[var(--vermilion-glow)] active:scale-90 transition-all duration-200"
                           title="标记复习失败"
                         >
                           ✗
@@ -180,14 +175,14 @@ export default function WrongBook() {
                     )}
                     <button
                       onClick={() => markWordMastered(w.word)}
-                      className="px-2 py-1 text-xs rounded border border-[var(--ks-rule)] text-[var(--ks-text-faint)] hover:border-[var(--ks-patina)] hover:text-[var(--ks-patina)] transition-colors"
+                      className="px-2 py-1 text-[10px] rounded-lg border border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--patina)] hover:text-[var(--patina-bright)] transition-all duration-200"
                       title="标记为已掌握"
                     >
                       掌握
                     </button>
                     <button
                       onClick={() => removeWrongWord(w.word)}
-                      className="px-2 py-1 text-xs rounded border border-[var(--ks-rule)] text-[var(--ks-text-faint)] hover:border-[var(--ks-vermilion)] hover:text-[var(--ks-vermilion)] transition-colors"
+                      className="px-2 py-1 text-[10px] rounded-lg border border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--vermilion)] hover:text-[var(--vermilion-bright)] transition-all duration-200"
                       title="删除"
                     >
                       删除
@@ -197,12 +192,14 @@ export default function WrongBook() {
 
                 {/* 艾宾浩斯进度条 */}
                 {!w.mastered && progress.total > 0 && (
-                  <div className="mt-2 flex items-center gap-1">
+                  <div className="mt-3 flex items-center gap-1">
                     {Array.from({ length: progress.total }).map((_, i) => (
                       <div
                         key={i}
-                        className={`h-0.5 flex-1 rounded-full ${
-                          i < progress.current ? 'bg-[var(--ks-patina)]' : 'bg-[var(--ks-graphite)]'
+                        className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+                          i < progress.current
+                            ? 'bg-[var(--patina)]'
+                            : 'bg-[var(--bg-input)]'
                         }`}
                       />
                     ))}

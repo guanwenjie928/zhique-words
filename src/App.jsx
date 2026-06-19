@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import { StorageProvider } from './context/StorageContext'
 import Layout from './components/Layout'
 import Home from './pages/Home'
@@ -10,7 +10,7 @@ import Daily from './pages/Daily'
 export default function App() {
   return (
     <StorageProvider>
-      <BrowserRouter basename="/zhique-words">
+      <HashRouter>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -20,7 +20,7 @@ export default function App() {
             <Route path="/daily" element={<Daily />} />
           </Routes>
         </Layout>
-      </BrowserRouter>
+      </HashRouter>
     </StorageProvider>
   )
 }
