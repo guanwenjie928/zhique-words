@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* ============================================
+   知雀单词 — Impeccable Neo-Kinpaku 设计令牌
+   灵感来源: pbakaus/impeccable (GitHub 39.6k⭐)
+   暗色温暖矿物底 + 金色品牌锚点 + 铜绿状态对比
+   ============================================ */
+
+:root {
+  /* —— 品牌锚点 —— */
+  --ks-kinpaku: oklch(84% 0.19 80.46);          /* 主金色 */
+  --ks-kinpaku-rich: oklch(77% 0.13 82);        /* 激活态金色 */
+  --ks-kinpaku-deep: oklch(61% 0.085 78);       /* 深金边框 */
+  --ks-kinpaku-pale: oklch(86% 0.07 84);        /* 悬停浅金 */
+
+  --ks-patina: oklch(70% 0.12 188);             /* 铜绿 — 正确/在线 */
+  --ks-patina-pale: oklch(82% 0.07 188);        /* 悬停浅绿 */
+  --ks-patina-deep: oklch(49% 0.08 188);        /* 深氧化绿 */
+
+  /* —— 暗色表面 —— */
+  --ks-lacquer: oklch(7% 0.006 95);             /* 页面底色 */
+  --ks-lacquer-deep: oklch(4% 0.004 95);        /* 最深 inset */
+  --ks-raised: oklch(11% 0.006 95);             /* 面板/卡片 */
+  --ks-graphite: oklch(15% 0.008 95);           /* 输入框/非激活 */
+  --ks-graphite-2: oklch(19% 0.008 95);         /* 上一级 */
+
+  /* —— 文字 —— */
+  --ks-champagne: oklch(91% 0 0);               /* 标题 */
+  --ks-text: oklch(88% 0 0);                    /* 正文 */
+  --ks-text-muted: oklch(72% 0 0);              /* 辅助 */
+  --ks-text-faint: oklch(62% 0 0);              /* 次要 */
+  --ks-text-disabled: oklch(52% 0 0);           /* 禁用 */
+
+  /* —— 边框 —— */
+  --ks-rule: oklch(78% 0 0 / 0.16);             /* 默认细线 */
+  --ks-rule-strong: oklch(74% 0.09 82 / 0.6);   /* 激活金线 */
+
+  /* —— 状态 —— */
+  --ks-vermilion: oklch(58% 0.15 35);           /* 错误/警告 */
+  --ks-success: oklch(45% 0.18 145);            /* 成功深色 */
+  --ks-success-bg: oklch(58% 0.12 145);         /* 成功背景 */
+
+  /* —— 字体 —— */
+  --ks-font-display: "Alumni Sans Pinstripe", "Inter", system-ui, sans-serif;
+  --ks-font-body: "Albert Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --ks-font-mono: "SFMono-Regular", "Roboto Mono", "Consolas", monospace;
+
+  /* —— 圆角 —— */
+  --ks-radius: 2px;
+  --ks-radius-lg: 8px;
+
+  /* —— 动效 —— */
+  --ks-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  font-family: var(--ks-font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ks-text);
+  background-color: var(--ks-lacquer);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--ks-lacquer);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* —— 标题排版 —— */
+h1, h2, h3 {
+  font-family: var(--ks-font-body);
+  color: var(--ks-champagne);
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+/* —— 工具类 —— */
+.text-champagne { color: var(--ks-champagne); }
+.text-muted { color: var(--ks-text-muted); }
+.text-faint { color: var(--ks-text-faint); }
+.text-gold { color: var(--ks-kinpaku); }
+.text-patina { color: var(--ks-patina); }
+.text-vermilion { color: var(--ks-vermilion); }
+
+.bg-lacquer { background-color: var(--ks-lacquer); }
+.bg-lacquer-deep { background-color: var(--ks-lacquer-deep); }
+.bg-raised { background-color: var(--ks-raised); }
+.bg-graphite { background-color: var(--ks-graphite); }
+
+.border-rule { border-color: var(--ks-rule); }
+.border-gold { border-color: var(--ks-rule-strong); }
+
+.font-mono { font-family: var(--ks-font-mono); }
+.font-display { font-family: var(--ks-font-display); }
+
+/* —— 滚动条 —— */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--ks-lacquer-deep); }
+::-webkit-scrollbar-thumb { background: var(--ks-graphite-2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ks-kinpaku-deep); }
+
+/* —— 选中文本 —— */
+::selection {
+  background: oklch(84% 0.19 80.46 / 0.3);
+  color: var(--ks-champagne);
+}
+
+/* —— 焦点态 —— */
+:focus-visible {
+  outline: 2px solid var(--ks-patina);
+  outline-offset: 4px;
+}
+
+/* —— 输入框 —— */
+input, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--ks-text);
+  background-color: var(--ks-graphite);
+  border: 1px solid var(--ks-rule);
+  border-radius: var(--ks-radius);
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s var(--ks-ease);
+  width: 100%;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--ks-rule-strong);
+}
+
+input::placeholder {
+  color: var(--ks-text-faint);
+}
+
+/* —— 动画 —— */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(84% 0.19 80.46 / 0.3); }
+  50% { box-shadow: 0 0 0 6px oklch(84% 0.19 80.46 / 0); }
+}
+
+.animate-fade-in { animation: fadeIn 0.4s var(--ks-ease) both; }
+.animate-shake { animation: shake 0.3s ease; }
+.animate-pulse-gold { animation: pulse-gold 2s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
