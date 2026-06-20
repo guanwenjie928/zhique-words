@@ -17,7 +17,7 @@ async function test() {
     const page = await browser.newPage()
     const errors = []
     page.on('requestfailed', req => errors.push(req.url()))
-    await page.goto(BASE_URL, { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 })
     await sleep(2000)
     const title = await page.textContent('h1')
     log('首页标题', title && title.includes('英语词汇量'))
@@ -34,7 +34,7 @@ async function test() {
     const page = await browser.newPage()
     let dataOk = false
     page.on('response', res => { if (res.url().includes('cet4.json') && res.status() === 200) dataOk = true })
-    await page.goto(BASE_URL + 'practice', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'practice', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await page.locator('text=释义').first().waitFor({ timeout: 15000 })
     await sleep(2000)
     log('CET4 JSON 加载', dataOk)
@@ -46,7 +46,7 @@ async function test() {
   console.log('\n=== 轮次 3: 拼写填空 ===')
   try {
     const page = await browser.newPage()
-    await page.goto(BASE_URL + 'practice', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'practice', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await page.locator('text=释义').first().waitFor({ timeout: 15000 })
     await sleep(1000)
     const input = page.locator('input[placeholder*="英文单词"]')
@@ -75,7 +75,7 @@ async function test() {
   console.log('\n=== 轮次 4: 字母填空 ===')
   try {
     const page = await browser.newPage()
-    await page.goto(BASE_URL + 'practice', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'practice', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await page.locator('text=释义').first().waitFor({ timeout: 15000 })
     await sleep(1000)
     await page.locator('button:has-text("字母填空")').click()
@@ -99,11 +99,11 @@ async function test() {
   console.log('\n=== 轮次 5: 移动端 ===')
   try {
     const page = await browser.newPage({ viewport: { width: 375, height: 812 } })
-    await page.goto(BASE_URL, { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 })
     await sleep(2000)
     log('底部导航', await page.locator('nav.fixed.bottom-0').isVisible())
     log('无水平溢出', (await page.evaluate(() => document.body.scrollWidth)) <= 375)
-    await page.goto(BASE_URL + 'practice', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'practice', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await page.locator('text=释义').first().waitFor({ timeout: 15000 })
     log('移动端练习', await page.locator('input[placeholder*="英文单词"]').isVisible().catch(() => false))
     await page.close()
@@ -113,7 +113,7 @@ async function test() {
   console.log('\n=== 轮次 6: 桌面端 ===')
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
-    await page.goto(BASE_URL, { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 })
     await sleep(2000)
     log('顶部导航', await page.locator('header nav').isVisible())
     log('底部导航隐藏', !await page.locator('nav.fixed.bottom-0').isVisible())
@@ -125,7 +125,7 @@ async function test() {
   console.log('\n=== 轮次 7: 错词本 ===')
   try {
     const page = await browser.newPage()
-    await page.goto(BASE_URL + 'wrong-book', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'wrong-book', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await sleep(2000)
     log('统计卡片', await page.locator('text=总错词').isVisible().catch(() => false))
     log('筛选按钮', await page.locator('button:has-text("待复习")').isVisible().catch(() => false))
@@ -137,13 +137,13 @@ async function test() {
   console.log('\n=== 轮次 8: 统计+每日 ===')
   try {
     const page = await browser.newPage()
-    await page.goto(BASE_URL + 'stats', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'stats', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await sleep(2000)
     log('统计页', await page.locator('text=总练习').isVisible().catch(() => false))
     log('趋势图', await page.locator('text=最近 7 天').isVisible().catch(() => false))
     log('打卡日历', await page.locator('text=打卡日历').isVisible().catch(() => false))
     log('词库进度', await page.locator('text=词库进度').isVisible().catch(() => false))
-    await page.goto(BASE_URL + 'daily', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'daily', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await sleep(8000)
     log('每日单词页', await page.locator('text=每日单词').isVisible().catch(() => false))
     const card = page.locator('.cursor-pointer').first()
@@ -162,7 +162,7 @@ async function test() {
   console.log('\n=== 轮次 9: 导航 ===')
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
-    await page.goto(BASE_URL, { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 })
     await sleep(1000)
     for (const [label, part] of [['练习','practice'],['错词本','wrong-book'],['统计','stats'],['每日','daily']]) {
       await page.locator(`header a:has-text("${label}")`).click()
@@ -179,7 +179,7 @@ async function test() {
   console.log('\n=== 轮次 10: 发音+等级+正确答案 ===')
   try {
     const page = await browser.newPage()
-    await page.goto(BASE_URL + 'practice', { waitUntil: 'networkidle', timeout: 30000 })
+    await page.goto(BASE_URL + 'practice', { waitUntil: 'domcontentloaded', timeout: 30000 })
     await page.locator('text=释义').first().waitFor({ timeout: 15000 })
     await sleep(1000)
     // 提交错误答案

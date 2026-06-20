@@ -366,3 +366,127 @@ input::placeholder {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================
+   单词练习 — 行内下划线样式
+   ============================================ */
+
+/* 可见字母 — 大号 monospace，柔和白色 */
+.letter-visible {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4em;
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 500;
+  color: var(--text-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* 挖空输入框 — 行内下划线风格 */
+.letter-blank-input {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4em;
+  height: 1.8em;
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 500;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--text-bright);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid var(--border-gold-strong);
+  border-radius: 0;
+  padding: 0 0 0.1em 0;
+  margin: 0 1px;
+  outline: none;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.letter-blank-input:focus {
+  border-bottom-color: var(--gold);
+  border-bottom-width: 3px;
+  box-shadow: none;
+  color: var(--gold-pale);
+}
+
+.letter-blank-input::placeholder {
+  color: transparent;
+}
+
+/* 答题后状态 */
+.letter-blank-correct {
+  border-bottom-color: var(--patina) !important;
+  color: var(--patina-bright) !important;
+  background: var(--patina-glow);
+  border-radius: 4px 4px 0 0;
+}
+
+.letter-blank-wrong {
+  border-bottom-color: var(--vermilion) !important;
+  color: var(--vermilion-bright) !important;
+  background: var(--vermilion-glow);
+  border-radius: 4px 4px 0 0;
+}
+
+/* 拼写模式输入框 */
+.spelling-input {
+  max-width: 20rem;
+  margin: 0 auto;
+  text-align: center;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  color: var(--text-bright);
+  background: var(--bg-input);
+  border: 1px solid var(--border-gold-strong);
+  border-radius: var(--r-md);
+  padding: 0.6rem 1rem;
+  width: 100%;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.spelling-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+
+.spelling-input::placeholder {
+  color: var(--text-faint);
+  font-size: 0.7em;
+  letter-spacing: 0.05em;
+}
+
+.spelling-correct {
+  border-color: var(--patina) !important;
+  color: var(--patina-bright) !important;
+}
+
+.spelling-wrong {
+  border-color: var(--vermilion) !important;
+  color: var(--vermilion-bright) !important;
+}
+
+/* ============================================
+   声波动画 — 发音按钮播报时的动态效果
+   ============================================ */
+
+@keyframes soundWave {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+.sound-bar {
+  display: inline-block;
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  transform-origin: center;
+  animation: soundWave 0.6s ease-in-out infinite;
+}
