@@ -113,6 +113,7 @@ export default function WordCard({ wordData, mode, onAnswer, onNext, autoSpeak }
           setLetterInputs={setLetterInputs}
           checked={checked}
           word={word}
+          inputRef={inputRef}
           onKeyDown={handleKeyDown}
         />
       )}
@@ -177,7 +178,7 @@ export default function WordCard({ wordData, mode, onAnswer, onNext, autoSpeak }
 }
 
 /** 字母填空模式 — 行内下划线风格 */
-function LetterMode({ blankData, letterInputs, setLetterInputs, checked, word, onKeyDown }) {
+function LetterMode({ blankData, letterInputs, setLetterInputs, checked, word, inputRef, onKeyDown }) {
   if (!blankData) return null
 
   const { display, blanks } = blankData
@@ -211,12 +212,13 @@ function LetterMode({ blankData, letterInputs, setLetterInputs, checked, word, o
               <input
                 key={i}
                 id={`blank-${blankIdx}`}
+                ref={blankIdx === 0 ? inputRef : undefined}
                 type="text"
                 maxLength={1}
                 value={value}
                 onChange={(e) => handleSingleChange(blankIdx, e.target.value)}
                 onKeyDown={onKeyDown}
-                disabled={checked}
+                readOnly={checked}
                 className={`letter-blank-input ${
                   isWrong
                     ? 'letter-blank-wrong'
@@ -258,7 +260,7 @@ function SpellingMode({ userInput, setUserInput, checked, status, word, inputRef
         value={userInput}
         onChange={(e) => setUserInput(e.target.value)}
         onKeyDown={onKeyDown}
-        disabled={checked}
+        readOnly={checked}
         placeholder="输入完整的英文单词…"
         className={`spelling-input ${
           checked
