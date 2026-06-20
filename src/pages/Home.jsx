@@ -23,7 +23,7 @@ export default function Home() {
         <div className="flex items-center gap-2 mb-3">
           <span className="text-2xl animate-float">🐦</span>
           <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--gold)]">
-            Zhique Words
+            go go go
           </span>
         </div>
         <h1 className="text-3xl md:text-5xl font-display font-light text-[var(--text-bright)] leading-tight">

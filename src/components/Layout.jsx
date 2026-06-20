@@ -63,10 +63,10 @@ export function Navbar() {
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-display text-xl font-semibold tracking-wide text-[var(--text-bright)] group-hover:text-[var(--gold)] transition-colors duration-300">
-              知雀单词
+              Spell Free
             </span>
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--text-faint)] mt-0.5">
-              Zhique Words
+              go go go
             </span>
           </div>
         </Link>
