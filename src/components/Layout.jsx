@@ -58,8 +58,21 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 flex items-center justify-center rounded-lg border border-[var(--border-gold)] bg-[var(--bg-raised)] transition-all duration-300 group-hover:border-[var(--border-gold-strong)] group-hover:shadow-[var(--shadow-gold)]">
-            <span className="text-lg transition-transform duration-300 group-hover:scale-110">🐦</span>
+          <div className="relative w-9 h-9 flex items-center justify-center rounded-lg overflow-hidden transition-all duration-300 group-hover:shadow-[var(--shadow-gold)] group-hover:scale-105">
+            <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="logoGold" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#f0c878" />
+                  <stop offset="0.5" stopColor="#e8b864" />
+                  <stop offset="1" stopColor="#b8924a" />
+                </linearGradient>
+              </defs>
+              <rect width="48" height="48" rx="12" fill="url(#logoGold)" />
+              <path d="M31 17.5C31 14.5 28.5 12.5 24 12.5C19.5 12.5 17 15 17 18C17 21 19.5 22.5 24 23.5C28.5 24.5 31 26 31 29C31 32 28.5 34.5 24 34.5C19.5 34.5 17 32.5 17 29.5" stroke="#161310" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              <rect x="36" y="16" width="8" height="2.5" rx="1.25" fill="#161310" opacity="0.8" />
+              <rect x="37" y="22.5" width="7" height="2.5" rx="1.25" fill="#161310" opacity="0.5" />
+              <rect x="36" y="29" width="8" height="2.5" rx="1.25" fill="#161310" opacity="0.8" />
+            </svg>
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-display text-xl font-semibold tracking-wide text-[var(--text-bright)] group-hover:text-[var(--gold)] transition-colors duration-300">
